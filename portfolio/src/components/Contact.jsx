@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Mail, Send, Github as GithubIcon, Link as LinkedinIcon } from 'lucide-react'
+import { Mail, Send, Globe as GithubIcon, Link as LinkedinIcon } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const defaultContact = {

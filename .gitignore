@@ -5,7 +5,7 @@ node_modules/
 # Build artifacts
 dist/
 build/
-*.js
+*.js.map
 
 # Environment
 .env
@@ -15,6 +15,8 @@ build/
 # Editors
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # Logs
 *.log
@@ -27,8 +29,7 @@ __pycache__/
 
 # Temporary files
 *.tmp
-*.swp
-*.swo
+*.temp
 
 # OS
 .DS_Store
@@ -39,36 +40,14 @@ coverage/
 htmlcov/
 .coverage
 
-# Testing
+# Cache
 .mypy_cache/
 .pytest_cache/
+.cache/
 
-# Java/Maven
-target/
-.gradle/
-*.class
-
-# Compression
+# Distribution
+*.tar.gz
 *.zip
 *.gz
 *.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
 ```
