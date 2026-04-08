@@ -95,7 +95,7 @@ function App() {
             исключительных цифровых продуктов. В настоящее время я сосредоточен на 
             разработке масштабируемых решений.
           </p>
-          <a href="#contact" className="cta-button">Связаться со мной</a>
+          <a href={`mailto:${footerContact?.email || ''}`} className="cta-button">Связаться со мной</a>
         </section>
 
         <About isAdmin={isAdmin} />
@@ -105,54 +105,7 @@ function App() {
       </main>
 
       <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-section footer-left">
-            <h4>Контакты</h4>
-            <div className="footer-links">
-              {footerContact?.phone ? (
-                <a href={`tel:${footerContact.phone}`} className="footer-link">
-                  {footerContact.phone}
-                </a>
-              ) : (
-                <span className="footer-link placeholder-text">Нет информации</span>
-              )}
-              {footerContact?.email ? (
-                <a href={`mailto:${footerContact.email}`} className="footer-link">
-                  <Mail size={18} />
-                  {footerContact.email}
-                </a>
-              ) : (
-                <span className="footer-link placeholder-text">Нет информации</span>
-              )}
-            </div>
-          </div>
-          
-          <div className="footer-section footer-right">
-            <h4>Социальные сети</h4>
-            <div className="social-links">
-              {footerContact?.telegram ? (
-                <a href={`https://t.me/${footerContact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="social-link" title="Telegram">
-                  <FaTelegram size={20} />
-                </a>
-              ) : null}
-              {footerContact?.linkedin ? (
-                <a href={footerContact.linkedin} target="_blank" rel="noopener noreferrer" className="social-link" title="LinkedIn">
-                  <FaLinkedin size={20} />
-                </a>
-              ) : null}
-              {footerContact?.github ? (
-                <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
-                  <FaGithub size={20} />
-                </a>
-              ) : null}
-            </div>
-          </div>
-        </div>
-        
-        <div className="footer-bottom">
-          <p>Дизайн вдохновлен <a href="https://v4.brittanychiang.com/" target="_blank" rel="noopener noreferrer" style={{color: 'var(--accent)'}}>Brittany Chiang</a></p>
-          <p>&copy; {new Date().getFullYear()} Portfolio. All rights reserved.</p>
-        </div>
+        <p>&copy; {new Date().getFullYear()} Portfolio. All rights reserved.</p>
       </footer>
     </div>
   )
