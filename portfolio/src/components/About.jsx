@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
-
-const defaultAbout = {
-  name: 'Ваше Имя',
-  title: 'Salesforce Developer & Golang Enthusiast',
-  description: 'Привет! Я разработчик с опытом работы в Salesforce и сейчас активно изучаю Golang. Я создаю масштабируемые решения и постоянно совершенствую свои навыки.',
-  salesforce_skills: 'Apex, Lightning Web Components, SOQL, Flow Builder',
-  golang_skills: 'Go, Gin, PostgreSQL, Docker'
-}
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 export default function About({ isAdmin }) {
   const [about, setAbout] = useState(null)
@@ -20,6 +12,11 @@ export default function About({ isAdmin }) {
   }, [])
   
   async function fetchAbout() {
+    if (!isSupabaseConfigured) {
+      setLoading(false)
+      return
+    }
+    
     try {
       const { data, error } = await supabase
         .from('about')
@@ -37,6 +34,11 @@ export default function About({ isAdmin }) {
   }
   
   async function handleSave() {
+    if (!isSupabaseConfigured) {
+      alert('Supabase не настроен. Проверьте переменные окружения.')
+      return
+    }
+    
     try {
       if (about?.id) {
         const { error } = await supabase
@@ -59,13 +61,13 @@ export default function About({ isAdmin }) {
       fetchAbout()
     } catch (error) {
       console.error('Error saving about:', error)
-      alert('Error saving data')
+      alert('Ошибка при сохранении: ' + error.message)
     }
   }
   
   if (loading) return <div className="section">Загрузка...</div>
   
-  const displayData = about || defaultAbout
+  const hasData = about && (about.name || about.title || about.description)
   
   return (
     <section id="about" className="section">
@@ -124,17 +126,17 @@ export default function About({ isAdmin }) {
             <button onClick={() => setEditing(false)} className="cancel-btn">Отмена</button>
           </div>
         </div>
-      ) : (
+      ) : hasData ? (
         <div className="about-content">
-          <h3 className="name">{displayData.name}</h3>
-          <p className="title">{displayData.title}</p>
-          <p className="description">{displayData.description}</p>
+          <h3 className="name">{about.name}</h3>
+          <p className="title">{about.title}</p>
+          <p className="description">{about.description}</p>
           
           <div className="skills-section">
             <div className="skills-block salesforce">
               <h4>Salesforce</h4>
               <div className="skills-list">
-                {(displayData.salesforce_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
+                {(about.salesforce_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
                   <span key={i} className="skill-tag">{skill.trim()}</span>
                 ))}
               </div>
@@ -143,13 +145,15 @@ export default function About({ isAdmin }) {
             <div className="skills-block golang">
               <h4>Golang</h4>
               <div className="skills-list">
-                {(displayData.golang_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
+                {(about.golang_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
                   <span key={i} className="skill-tag">{skill.trim()}</span>
                 ))}
               </div>
             </div>
           </div>
         </div>
+      ) : (
+        <p className="placeholder-text">Нет информации для отображения</p>
       )}
     </section>
   )
