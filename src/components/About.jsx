@@ -71,7 +71,7 @@ export default function About({ isAdmin }) {
   
   return (
     <section id="about" className="section">
-      <p className="contact-intro">0.1 Обо мне</p>
+      <h2 className="section-title" data-section="1">Обо мне</h2>
       
       {isAdmin && !editing && (
         <button onClick={() => setEditing(true)} className="admin-btn">

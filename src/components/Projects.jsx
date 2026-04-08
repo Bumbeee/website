@@ -99,7 +99,7 @@ export default function Projects({ isAdmin }) {
   
   return (
     <section id="projects" className="section">
-      <p className="contact-intro">03. Проекты</p>
+      <h2 className="section-title" data-section="3">Проекты</h2>
 
       {isAdmin && editingId === null && (
         <button onClick={() => {
