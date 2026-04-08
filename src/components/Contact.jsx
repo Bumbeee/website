@@ -75,7 +75,7 @@ export default function Contact({ isAdmin }) {
   if (loading) return <div className="section">Загрузка...</div>
   
   return (
-    <section id="contact" className="section">
+    <section id="contact" className="section contact-content">
       <h2 className="section-title" data-section="4">Контакты</h2>
       <p className="contact-text">
         Хотя я в настоящее время не ищу новых возможностей, мой почтовый ящик всегда открыт. 
