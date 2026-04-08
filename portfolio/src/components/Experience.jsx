@@ -1,16 +1,35 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
+const defaultExperiences = [
+  {
+    id: 'default-1',
+    company: 'Компания ABC',
+    position: 'Salesforce Developer',
+    description: 'Разработка и поддержка решений на платформе Salesforce. Создание кастомных объектов, триггеров, Lightning компонентов.',
+    start_date: '2022-01-01',
+    end_date: null
+  },
+  {
+    id: 'default-2',
+    company: 'Стартап XYZ',
+    position: 'Junior Golang Developer',
+    description: 'Изучение и применение Go для разработки микросервисов. Работа с PostgreSQL, Docker, REST API.',
+    start_date: '2023-06-01',
+    end_date: null
+  }
+]
+
 export default function Experience({ isAdmin }) {
   const [experiences, setExperiences] = useState([])
   const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState(null)
   const [formData, setFormData] = useState({})
-
+  
   useEffect(() => {
     fetchExperiences()
   }, [])
-
+  
   async function fetchExperiences() {
     try {
       const { data, error } = await supabase
@@ -18,7 +37,7 @@ export default function Experience({ isAdmin }) {
         .select('*')
         .order('start_date', { ascending: false })
 
-      if (error) throw error
+      if (error && error.code !== 'PGRST116') throw error
       setExperiences(data || [])
     } catch (error) {
       console.error('Error fetching experiences:', error)
@@ -26,10 +45,10 @@ export default function Experience({ isAdmin }) {
       setLoading(false)
     }
   }
-
+  
   async function handleSave() {
     try {
-      if (editingId) {
+      if (editingId && editingId !== 'new') {
         const { error } = await supabase
           .from('experience')
           .update(formData)
@@ -51,7 +70,7 @@ export default function Experience({ isAdmin }) {
       alert('Error saving data')
     }
   }
-
+  
   async function handleDelete(id) {
     if (!confirm('Вы уверены?')) return
     try {
@@ -67,19 +86,21 @@ export default function Experience({ isAdmin }) {
       alert('Error deleting data')
     }
   }
-
+  
   function startEdit(exp) {
     setEditingId(exp.id)
     setFormData(exp)
   }
-
+  
   function cancelEdit() {
     setEditingId(null)
     setFormData({})
   }
-
-  if (loading) return <div className="section">Loading...</div>
-
+  
+  if (loading) return <div className="section">Загрузка...</div>
+  
+  const displayExperiences = experiences.length > 0 ? experiences : defaultExperiences
+  
   return (
     <section id="experience" className="section">
       <h2 className="section-title">Опыт работы</h2>
@@ -143,76 +164,80 @@ export default function Experience({ isAdmin }) {
       )}
 
       <div className="experience-list">
-        {experiences.map((exp) => (
-          <div key={exp.id} className="experience-item">
-            {editingId === exp.id ? (
-              <div className="edit-form">
-                <div className="form-group">
-                  <label>Компания:</label>
-                  <input
-                    type="text"
-                    value={formData.company || ''}
-                    onChange={(e) => setFormData({...formData, company: e.target.value})}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Должность:</label>
-                  <input
-                    type="text"
-                    value={formData.position || ''}
-                    onChange={(e) => setFormData({...formData, position: e.target.value})}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Начало:</label>
-                  <input
-                    type="date"
-                    value={formData.start_date || ''}
-                    onChange={(e) => setFormData({...formData, start_date: e.target.value})}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Конец:</label>
-                  <input
-                    type="date"
-                    value={formData.end_date || ''}
-                    onChange={(e) => setFormData({...formData, end_date: e.target.value})}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Описание:</label>
-                  <textarea
-                    value={formData.description || ''}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    rows="4"
-                  />
-                </div>
-                <div className="form-actions">
-                  <button onClick={handleSave} className="save-btn">Сохранить</button>
-                  <button onClick={cancelEdit} className="cancel-btn">Отмена</button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="experience-header">
-                  <h3>{exp.position}</h3>
-                  <span className="company">{exp.company}</span>
-                  <span className="period">
-                    {new Date(exp.start_date).toLocaleDateString('ru-RU')} - 
-                    {exp.end_date ? new Date(exp.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
-                  </span>
-                </div>
-                <p className="description">{exp.description}</p>
-                {isAdmin && (
-                  <div className="admin-actions">
-                    <button onClick={() => startEdit(exp)} className="edit-btn">Редактировать</button>
-                    <button onClick={() => handleDelete(exp.id)} className="delete-btn">Удалить</button>
+        {displayExperiences.length > 0 ? (
+          displayExperiences.map((exp) => (
+            <div key={exp.id} className="experience-item">
+              {editingId === exp.id ? (
+                <div className="edit-form">
+                  <div className="form-group">
+                    <label>Компания:</label>
+                    <input
+                      type="text"
+                      value={formData.company || ''}
+                      onChange={(e) => setFormData({...formData, company: e.target.value})}
+                    />
                   </div>
-                )}
-              </>
-            )}
-          </div>
-        ))}
+                  <div className="form-group">
+                    <label>Должность:</label>
+                    <input
+                      type="text"
+                      value={formData.position || ''}
+                      onChange={(e) => setFormData({...formData, position: e.target.value})}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Начало:</label>
+                    <input
+                      type="date"
+                      value={formData.start_date || ''}
+                      onChange={(e) => setFormData({...formData, start_date: e.target.value})}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Конец:</label>
+                    <input
+                      type="date"
+                      value={formData.end_date || ''}
+                      onChange={(e) => setFormData({...formData, end_date: e.target.value})}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Описание:</label>
+                    <textarea
+                      value={formData.description || ''}
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      rows="4"
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button onClick={handleSave} className="save-btn">Сохранить</button>
+                    <button onClick={cancelEdit} className="cancel-btn">Отмена</button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="experience-header">
+                    <h3>{exp.position}</h3>
+                    <span className="company">{exp.company}</span>
+                    <span className="period">
+                      {exp.start_date ? new Date(exp.start_date).toLocaleDateString('ru-RU') : ''} - 
+                      {exp.end_date ? new Date(exp.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
+                    </span>
+                  </div>
+                  <p className="description">{exp.description}</p>
+                  {isAdmin && exp.id !== 'default-1' && exp.id !== 'default-2' && (
+                    <div className="admin-actions">
+                      <button onClick={() => startEdit(exp)} className="edit-btn">Редактировать</button>
+                      <button onClick={() => handleDelete(exp.id)} className="delete-btn">Удалить</button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          ))
+        ) : (
+          <p className="placeholder-text">Нет информации для отображения</p>
+        )}
       </div>
     </section>
   )
