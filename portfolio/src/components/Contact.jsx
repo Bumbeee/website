@@ -108,26 +108,18 @@ export default function Contact({ isAdmin }) {
         </div>
       ) : (
         <div className="contact-content">
-          {contact?.email && (
-            <a href={`mailto:${contact.email}`} className="contact-link">
-              {contact.email}
-            </a>
-          )}
-          {contact?.telegram && (
-            <a href={`https://t.me/${contact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
-              Telegram: @{contact.telegram.replace('@', '')}
-            </a>
-          )}
-          {contact?.github && (
-            <a href={`https://github.com/${contact.github.replace('https://github.com/', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
-              GitHub: {contact.github}
-            </a>
-          )}
-          {contact?.linkedin && (
-            <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
-              LinkedIn
-            </a>
-          )}
+          <a href={`mailto:${contact?.email || defaultContact.email}`} className="contact-link">
+            {contact?.email || defaultContact.email}
+          </a>
+          <a href={`https://t.me/${(contact?.telegram || defaultContact.telegram).replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
+            Telegram: {(contact?.telegram || defaultContact.telegram).replace('@', '')}
+          </a>
+          <a href={contact?.github || defaultContact.github} target="_blank" rel="noopener noreferrer" className="contact-link">
+            GitHub: {contact?.github || defaultContact.github}
+          </a>
+          <a href={contact?.linkedin || defaultContact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
+            LinkedIn
+          </a>
         </div>
       )}
     </section>
