@@ -1,16 +1,23 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
+const defaultContact = {
+  email: 'your.email@example.com',
+  telegram: '@yourtelegram',
+  github: 'https://github.com/yourusername',
+  linkedin: 'https://linkedin.com/in/yourusername'
+}
+
 export default function Contact({ isAdmin }) {
   const [contact, setContact] = useState(null)
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState(false)
   const [formData, setFormData] = useState({})
-
+  
   useEffect(() => {
     fetchContact()
   }, [])
-
+  
   async function fetchContact() {
     try {
       const { data, error } = await supabase
@@ -18,7 +25,7 @@ export default function Contact({ isAdmin }) {
         .select('*')
         .single()
 
-      if (error) throw error
+      if (error && error.code !== 'PGRST116') throw error
       setContact(data)
       setFormData(data || {})
     } catch (error) {
@@ -55,7 +62,7 @@ export default function Contact({ isAdmin }) {
     }
   }
 
-  if (loading) return <div className="section">Loading...</div>
+  if (loading) return <div className="section">Загрузка...</div>
 
   return (
     <section id="contact" className="section">
@@ -108,18 +115,24 @@ export default function Contact({ isAdmin }) {
         </div>
       ) : (
         <div className="contact-content">
-          <a href={`mailto:${contact?.email || defaultContact.email}`} className="contact-link">
-            {contact?.email || defaultContact.email}
-          </a>
-          <a href={`https://t.me/${(contact?.telegram || defaultContact.telegram).replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
-            Telegram: {(contact?.telegram || defaultContact.telegram).replace('@', '')}
-          </a>
-          <a href={contact?.github || defaultContact.github} target="_blank" rel="noopener noreferrer" className="contact-link">
-            GitHub: {contact?.github || defaultContact.github}
-          </a>
-          <a href={contact?.linkedin || defaultContact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
-            LinkedIn
-          </a>
+          {contact || Object.keys(defaultContact).length > 0 ? (
+            <>
+              <a href={`mailto:${contact?.email || defaultContact.email}`} className="contact-link">
+                {contact?.email || defaultContact.email}
+              </a>
+              <a href={`https://t.me/${(contact?.telegram || defaultContact.telegram).replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
+                Telegram: {(contact?.telegram || defaultContact.telegram).replace('@', '')}
+              </a>
+              <a href={contact?.github || defaultContact.github} target="_blank" rel="noopener noreferrer" className="contact-link">
+                GitHub: {contact?.github || defaultContact.github}
+              </a>
+              <a href={contact?.linkedin || defaultContact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
+                LinkedIn
+              </a>
+            </>
+          ) : (
+            <p className="placeholder-text">Нет информации для отображения</p>
+          )}
         </div>
       )}
     </section>
