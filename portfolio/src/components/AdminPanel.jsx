@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
-export default function AdminPanel({ onLogout }) {
+export default function AdminPanel({ onLogin, onLogout }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-
+  
   useEffect(() => {
     const savedAuth = localStorage.getItem('adminAuthenticated')
     if (savedAuth === 'true') {
@@ -22,6 +22,7 @@ export default function AdminPanel({ onLogout }) {
       setIsAuthenticated(true)
       localStorage.setItem('adminAuthenticated', 'true')
       setError('')
+      onLogin()
     } else {
       setError('Неверный пароль')
     }
@@ -55,9 +56,12 @@ export default function AdminPanel({ onLogout }) {
   return (
     <div className="admin-panel">
       <div className="admin-header">
-        <span>Режим администратора</span>
+        <span>Режим администратора активен</span>
         <button onClick={handleLogout}>Выйти</button>
       </div>
+      <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
+        Теперь вы можете редактировать контент на странице. Нажмите "Админ" в навигации для выхода.
+      </p>
     </div>
   )
 }
