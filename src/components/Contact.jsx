@@ -72,7 +72,12 @@ export default function Contact({ isAdmin }) {
 
   return (
     <section id="contact" className="section">
-      <h2 className="section-title">Контакты</h2>
+      <p className="contact-intro">04. Что дальше?</p>
+      <h2 className="section-title" data-section="4">Контакты</h2>
+      <p className="contact-text">
+        Хотя я в настоящее время не ищу новых возможностей, мой почтовый ящик всегда открыт. 
+        Если у вас есть вопрос или просто хотите поздороваться, я сделаю все возможное, чтобы ответить!
+      </p>
 
       {isAdmin && !editing && (
         <button onClick={() => setEditing(true)} className="admin-btn">

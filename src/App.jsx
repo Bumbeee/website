@@ -46,6 +46,39 @@ function App() {
 
   return (
     <div className="app">
+      {/* Side Navigation (Desktop) */}
+      <nav className="side-nav">
+        <div>
+          <a href="#" className="side-nav-logo">BC</a>
+          <ul className="side-nav-links">
+            <li><a href="#about" className="side-nav-link">Обо мне</a></li>
+            <li><a href="#experience" className="side-nav-link">Опыт</a></li>
+            <li><a href="#projects" className="side-nav-link">Проекты</a></li>
+            <li><a href="#contact" className="side-nav-link">Контакты</a></li>
+          </ul>
+        </div>
+        <div>
+          <div className="side-nav-line"></div>
+          <div className="side-social">
+            {footerContact?.github && (
+              <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="side-social-link">
+                <FaGithub size={20} />
+              </a>
+            )}
+            {footerContact?.linkedin && (
+              <a href={footerContact.linkedin} target="_blank" rel="noopener noreferrer" className="side-social-link">
+                <FaLinkedin size={20} />
+              </a>
+            )}
+            {footerContact?.telegram && (
+              <a href={`https://t.me/${footerContact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="side-social-link">
+                <FaTelegram size={20} />
+              </a>
+            )}
+          </div>
+        </div>
+      </nav>
+
       <Navbar isAdmin={isAdmin} onToggleAdmin={handleToggleAdmin} />
       
       {showAdminModal && (
@@ -67,8 +100,15 @@ function App() {
 
       <main className="main-content">
         <section className="hero">
-          <h1>Привет, я <span className="highlight">{footerContact?.name || 'Ваше Имя'}</span></h1>
-          <p>Salesforce Developer & Golang Enthusiast</p>
+          <p className="hero-overline">Привет, меня зовут</p>
+          <h1>{footerContact?.name || 'Ваше Имя'}.</h1>
+          <h2>Я создаю вещи для интернета.</h2>
+          <p className="hero-description">
+            Я Salesforce Developer и Golang Enthusiast, специализирующийся на создании 
+            исключительных цифровых продуктов. В настоящее время я сосредоточен на 
+            разработке масштабируемых решений.
+          </p>
+          <a href="#contact" className="cta-button">Связаться со мной</a>
         </section>
 
         <About isAdmin={isAdmin} />
@@ -123,6 +163,7 @@ function App() {
         </div>
         
         <div className="footer-bottom">
+          <p>Дизайн вдохновлен <a href="https://v4.brittanychiang.com/" target="_blank" rel="noopener noreferrer" style={{color: 'var(--accent)'}}>Brittany Chiang</a></p>
           <p>&copy; {new Date().getFullYear()} Portfolio. All rights reserved.</p>
         </div>
       </footer>

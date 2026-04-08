@@ -110,7 +110,8 @@ export default function Experience({ isAdmin }) {
   
   return (
     <section id="experience" className="section">
-      <h2 className="section-title">Опыт работы</h2>
+      <p className="contact-intro">02. Опыт работы</p>
+      <h2 className="section-title" data-section="2">Опыт работы</h2>
 
       {isAdmin && editingId === null && (
         <button onClick={() => {
