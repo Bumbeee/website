@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 export default function Experience({ isAdmin }) {
   const [experiences, setExperiences] = useState([])
@@ -13,6 +13,12 @@ export default function Experience({ isAdmin }) {
   }, [])
   
   async function fetchExperiences() {
+    if (!isSupabaseConfigured) {
+      setExperiences([])
+      setLoading(false)
+      return
+    }
+    
     try {
       const { data, error } = await supabase
         .from('experience')
@@ -23,12 +29,18 @@ export default function Experience({ isAdmin }) {
       setExperiences(data || [])
     } catch (error) {
       console.error('Error fetching experiences:', error)
+      setExperiences([])
     } finally {
       setLoading(false)
     }
   }
   
   async function handleSave() {
+    if (!isSupabaseConfigured) {
+      alert('Supabase не настроен. Проверьте переменные окружения.')
+      return
+    }
+    
     try {
       if (editingId && editingId !== 'new') {
         const { error } = await supabase
@@ -49,12 +61,17 @@ export default function Experience({ isAdmin }) {
       fetchExperiences()
     } catch (error) {
       console.error('Error saving experience:', error)
-      alert('Error saving data')
+      alert('Ошибка при сохранении: ' + error.message)
     }
   }
   
   async function handleDelete(id) {
     if (!confirm('Вы уверены?')) return
+    if (!isSupabaseConfigured) {
+      alert('Supabase не настроен.')
+      return
+    }
+    
     try {
       const { error } = await supabase
         .from('experience')
@@ -65,7 +82,7 @@ export default function Experience({ isAdmin }) {
       fetchExperiences()
     } catch (error) {
       console.error('Error deleting experience:', error)
-      alert('Error deleting data')
+      alert('Ошибка при удалении: ' + error.message)
     }
   }
   

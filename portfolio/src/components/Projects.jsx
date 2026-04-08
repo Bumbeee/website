@@ -1,22 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
-
-const defaultProjects = [
-  {
-    id: 'default-1',
-    title: 'Salesforce CRM Integration',
-    description: 'Интеграция Salesforce с внешними системами через REST API. Автоматизация бизнес-процессов.',
-    technologies: 'Apex, REST API, Lightning Web Components',
-    link: ''
-  },
-  {
-    id: 'default-2',
-    title: 'Golang Microservice',
-    description: 'Микросервис на Go для обработки данных в реальном времени. Использует PostgreSQL и Docker.',
-    technologies: 'Go, Gin, PostgreSQL, Docker',
-    link: ''
-  }
-]
+import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 export default function Projects({ isAdmin }) {
   const [projects, setProjects] = useState([])
@@ -29,6 +12,12 @@ export default function Projects({ isAdmin }) {
   }, [])
   
   async function fetchProjects() {
+    if (!isSupabaseConfigured) {
+      setProjects([])
+      setLoading(false)
+      return
+    }
+    
     try {
       const { data, error } = await supabase
         .from('projects')
@@ -39,12 +28,18 @@ export default function Projects({ isAdmin }) {
       setProjects(data || [])
     } catch (error) {
       console.error('Error fetching projects:', error)
+      setProjects([])
     } finally {
       setLoading(false)
     }
   }
   
   async function handleSave() {
+    if (!isSupabaseConfigured) {
+      alert('Supabase не настроен. Проверьте переменные окружения.')
+      return
+    }
+    
     try {
       if (editingId && editingId !== 'new') {
         const { error } = await supabase
@@ -65,12 +60,17 @@ export default function Projects({ isAdmin }) {
       fetchProjects()
     } catch (error) {
       console.error('Error saving project:', error)
-      alert('Error saving data')
+      alert('Ошибка при сохранении: ' + error.message)
     }
   }
   
   async function handleDelete(id) {
     if (!confirm('Вы уверены?')) return
+    if (!isSupabaseConfigured) {
+      alert('Supabase не настроен.')
+      return
+    }
+    
     try {
       const { error } = await supabase
         .from('projects')
@@ -81,7 +81,7 @@ export default function Projects({ isAdmin }) {
       fetchProjects()
     } catch (error) {
       console.error('Error deleting project:', error)
-      alert('Error deleting data')
+      alert('Ошибка при удалении: ' + error.message)
     }
   }
   
@@ -96,8 +96,6 @@ export default function Projects({ isAdmin }) {
   }
   
   if (loading) return <div className="section">Загрузка...</div>
-  
-  const displayProjects = projects.length > 0 ? projects : defaultProjects
   
   return (
     <section id="projects" className="section">
@@ -154,8 +152,8 @@ export default function Projects({ isAdmin }) {
       )}
 
       <div className="projects-grid">
-        {displayProjects.length > 0 ? (
-          displayProjects.map((project) => (
+        {projects.length > 0 ? (
+          projects.map((project) => (
             <div key={project.id} className="project-card">
               {editingId === project.id ? (
                 <div className="edit-form">
@@ -210,7 +208,7 @@ export default function Projects({ isAdmin }) {
                       Посмотреть проект →
                     </a>
                   )}
-                  {isAdmin && project.id !== 'default-1' && project.id !== 'default-2' && (
+                  {isAdmin && (
                     <div className="admin-actions">
                       <button onClick={() => startEdit(project)} className="edit-btn">Редактировать</button>
                       <button onClick={() => handleDelete(project.id)} className="delete-btn">Удалить</button>
