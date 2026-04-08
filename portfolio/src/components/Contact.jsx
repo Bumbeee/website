@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
+import { Mail, Send, Github as GithubIcon, Link as LinkedinIcon } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const defaultContact = {
-  email: 'your.email@example.com',
-  telegram: '@yourtelegram',
-  github: 'https://github.com/yourusername',
-  linkedin: 'https://linkedin.com/in/yourusername'
+  email: '',
+  telegram: '',
+  github: '',
+  linkedin: ''
 }
 
 export default function Contact({ isAdmin }) {
@@ -64,6 +65,8 @@ export default function Contact({ isAdmin }) {
 
   if (loading) return <div className="section">Загрузка...</div>
 
+  const displayContact = contact || Object.keys(defaultContact).length > 0 ? { ...defaultContact, ...contact } : null
+
   return (
     <section id="contact" className="section">
       <h2 className="section-title">Контакты</h2>
@@ -115,20 +118,32 @@ export default function Contact({ isAdmin }) {
         </div>
       ) : (
         <div className="contact-content">
-          {contact || Object.keys(defaultContact).length > 0 ? (
+          {displayContact && (displayContact.email || displayContact.telegram || displayContact.github || displayContact.linkedin) ? (
             <>
-              <a href={`mailto:${contact?.email || defaultContact.email}`} className="contact-link">
-                {contact?.email || defaultContact.email}
-              </a>
-              <a href={`https://t.me/${(contact?.telegram || defaultContact.telegram).replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
-                Telegram: {(contact?.telegram || defaultContact.telegram).replace('@', '')}
-              </a>
-              <a href={contact?.github || defaultContact.github} target="_blank" rel="noopener noreferrer" className="contact-link">
-                GitHub: {contact?.github || defaultContact.github}
-              </a>
-              <a href={contact?.linkedin || defaultContact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
-                LinkedIn
-              </a>
+              {displayContact.email && (
+                <a href={`mailto:${displayContact.email}`} className="contact-link">
+                  <Mail size={18} />
+                  {displayContact.email}
+                </a>
+              )}
+              {displayContact.telegram && (
+                <a href={`https://t.me/${displayContact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
+                  <Send size={18} />
+                  Telegram: {displayContact.telegram.replace('@', '')}
+                </a>
+              )}
+              {displayContact.github && (
+                <a href={displayContact.github} target="_blank" rel="noopener noreferrer" className="contact-link">
+                  <GithubIcon size={18} />
+                  GitHub
+                </a>
+              )}
+              {displayContact.linkedin && (
+                <a href={displayContact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
+                  <LinkedinIcon size={18} />
+                  LinkedIn
+                </a>
+              )}
             </>
           ) : (
             <p className="placeholder-text">Нет информации для отображения</p>
