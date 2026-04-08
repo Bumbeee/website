@@ -5,7 +5,8 @@ import About from './components/About'
 import Experience from './components/Experience'
 import Projects from './components/Projects'
 import Contact from './components/Contact'
-import { Send, Globe, Link as LinkIcon } from 'lucide-react'
+import { Send, Mail } from 'lucide-react'
+import { FaTelegram, FaLinkedin, FaGithub } from 'react-icons/fa'
 import { supabase, isSupabaseConfigured } from './lib/supabase'
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
               )}
               {footerContact?.email ? (
                 <a href={`mailto:${footerContact.email}`} className="footer-link">
+                  <Mail size={18} />
                   {footerContact.email}
                 </a>
               ) : (
@@ -103,17 +105,17 @@ function App() {
             <div className="social-links">
               {footerContact?.telegram ? (
                 <a href={`https://t.me/${footerContact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="social-link" title="Telegram">
-                  <Send size={20} />
-                </a>
-              ) : null}
-              {footerContact?.github ? (
-                <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
-                  <Globe size={20} />
+                  <FaTelegram size={20} />
                 </a>
               ) : null}
               {footerContact?.linkedin ? (
                 <a href={footerContact.linkedin} target="_blank" rel="noopener noreferrer" className="social-link" title="LinkedIn">
-                  <LinkIcon size={20} />
+                  <FaLinkedin size={20} />
+                </a>
+              ) : null}
+              {footerContact?.github ? (
+                <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="social-link" title="GitHub">
+                  <FaGithub size={20} />
                 </a>
               ) : null}
             </div>
