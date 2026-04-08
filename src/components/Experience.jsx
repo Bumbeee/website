@@ -279,6 +279,15 @@ export default function Experience({ isAdmin }) {
                   </span>
                 </div>
                 <p className="description">{exp.description || 'Нет информации'}</p>
+                {exp.stack && (
+                  <div className="experience-stack">
+                    <div className="stack-tags">
+                      {exp.stack.split(',').filter(s => s.trim()).map((tech, i) => (
+                        <span key={i} className="tech-tag">{tech.trim()}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <p className="experience-click-hint">Нажмите для подробностей</p>
                 {isAdmin && (
                   <div className="admin-actions" onClick={(e) => e.stopPropagation()}>
@@ -305,10 +314,14 @@ export default function Experience({ isAdmin }) {
               {selectedExperience.end_date ? new Date(selectedExperience.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
             </p>
             
-            {selectedExperience.description && (
+            {selectedExperience.achievements && (
               <div className="modal-section">
-                <h4>Описание</h4>
-                <p>{selectedExperience.description}</p>
+                <h4>Успехи</h4>
+                <ul className="modal-list">
+                  {selectedExperience.achievements.split('\n').filter(a => a.trim()).map((ach, i) => (
+                    <li key={i}>{ach.trim()}</li>
+                  ))}
+                </ul>
               </div>
             )}
             
@@ -334,14 +347,10 @@ export default function Experience({ isAdmin }) {
               </div>
             )}
             
-            {selectedExperience.achievements && (
+            {selectedExperience.description && (
               <div className="modal-section">
-                <h4>Успехи</h4>
-                <ul className="modal-list">
-                  {selectedExperience.achievements.split('\n').filter(a => a.trim()).map((ach, i) => (
-                    <li key={i}>{ach.trim()}</li>
-                  ))}
-                </ul>
+                <h4>Описание</h4>
+                <p>{selectedExperience.description}</p>
               </div>
             )}
             
