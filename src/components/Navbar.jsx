@@ -25,7 +25,7 @@ export default function Navbar({ isAdmin, onToggleAdmin }) {
 
         <div className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
           {navItems.map((item) => (
-            <a key={item.name} href={item.href} className="nav-link">
+            <a key={item.name} href={item.href} className="nav-link" onClick={() => setMobileMenuOpen(false)}>
               {item.name}
             </a>
           ))}

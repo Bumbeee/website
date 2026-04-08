@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 export default function Experience({ isAdmin }) {
@@ -6,7 +7,7 @@ export default function Experience({ isAdmin }) {
   const [loading, setLoading] = useState(true)
   const [editingId, setEditingId] = useState(null)
   const [formData, setFormData] = useState({})
-  const [selectedExperience, setSelectedExperience] = useState(null)
+  const [expandedId, setExpandedId] = useState(null)
   
   useEffect(() => {
     fetchExperiences()
@@ -96,12 +97,8 @@ export default function Experience({ isAdmin }) {
     setFormData({})
   }
   
-  function openDetails(exp) {
-    setSelectedExperience(exp)
-  }
-  
-  function closeDetails() {
-    setSelectedExperience(null)
+  function toggleExpand(id) {
+    setExpandedId(expandedId === id ? null : id)
   }
   
   if (loading) return <div className="section">Загрузка...</div>
@@ -197,7 +194,7 @@ export default function Experience({ isAdmin }) {
 
       {displayExperiences.length > 0 ? (
         displayExperiences.map((exp) => (
-          <div key={exp.id} className="experience-item" onClick={() => openDetails(exp)} style={{ cursor: 'pointer' }}>
+          <div key={exp.id} className="experience-item">
             {editingId === exp.id ? (
               <div className="edit-form" onClick={(e) => e.stopPropagation()}>
                 <div className="form-group">
@@ -271,27 +268,65 @@ export default function Experience({ isAdmin }) {
               </div>
             ) : (
               <>
-                <div className="experience-header">
-                  <h3>{exp.position || 'Нет информации'}</h3>
-                  <span className="company">{exp.company || 'Нет информации'}</span>
-                  <span className="period">
-                    {exp.start_date ? new Date(exp.start_date).toLocaleDateString('ru-RU') : ''} - 
-                    {exp.end_date ? new Date(exp.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
-                  </span>
+                <div className="experience-header" onClick={() => toggleExpand(exp.id)} style={{ cursor: 'pointer' }}>
+                  <div className="experience-header-main">
+                    <h3>{exp.position || 'Нет информации'}</h3>
+                    <span className="company">{exp.company || 'Нет информации'}</span>
+                  </div>
+                  <div className="experience-header-right">
+                    <span className="period">
+                      {exp.start_date ? new Date(exp.start_date).toLocaleDateString('ru-RU') : ''} - 
+                      {exp.end_date ? new Date(exp.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
+                    </span>
+                    <button className="expand-btn">
+                      {expandedId === exp.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </button>
+                  </div>
                 </div>
-                <p className="description">{exp.description || 'Нет информации'}</p>
-                {exp.stack && (
-                  <div className="experience-stack">
-                    <div className="stack-tags">
-                      {exp.stack.split(',').filter(s => s.trim()).map((tech, i) => (
-                        <span key={i} className="tech-tag">{tech.trim()}</span>
-                      ))}
-                    </div>
+                
+                {expandedId === exp.id && (
+                  <div className="experience-details">
+                    {exp.description && (
+                      <p className="description">{exp.description}</p>
+                    )}
+                    
+                    {exp.achievements && (
+                      <div className="details-section">
+                        <h4>Успехи</h4>
+                        <ul className="details-list">
+                          {exp.achievements.split('\n').filter(a => a.trim()).map((ach, i) => (
+                            <li key={i}>{ach.trim()}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {exp.responsibilities && (
+                      <div className="details-section">
+                        <h4>Обязанности</h4>
+                        <ul className="details-list">
+                          {exp.responsibilities.split('\n').filter(r => r.trim()).map((resp, i) => (
+                            <li key={i}>{resp.trim()}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {exp.stack && (
+                      <div className="details-section">
+                        <h4>Стек технологий</h4>
+                        <div className="stack-tags">
+                          {exp.stack.split(',').filter(s => s.trim()).map((tech, i) => (
+                            <span key={i} className="tech-tag">{tech.trim()}</span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
-                <p className="experience-click-hint">Нажмите для подробностей</p>
+                
                 {isAdmin && (
-                  <div className="admin-actions" onClick={(e) => e.stopPropagation()}>
+                  <div className="admin-actions">
                     <button onClick={() => startEdit(exp)} className="edit-btn">Редактировать</button>
                     <button onClick={() => handleDelete(exp.id)} className="delete-btn">Удалить</button>
                   </div>
@@ -302,64 +337,6 @@ export default function Experience({ isAdmin }) {
         ))
       ) : (
         <p className="placeholder-text">Нет информации для отображения</p>
-      )}
-
-      {selectedExperience && (
-        <div className="modal-overlay" onClick={closeDetails}>
-          <div className="modal-content experience-modal" onClick={(e) => e.stopPropagation()}>
-            <button className="close-modal-btn" onClick={closeDetails}>×</button>
-            <h3 className="modal-title">{selectedExperience.position || 'Нет информации'}</h3>
-            <p className="modal-company">{selectedExperience.company || 'Нет информации'}</p>
-            <p className="modal-period">
-              {selectedExperience.start_date ? new Date(selectedExperience.start_date).toLocaleDateString('ru-RU') : ''} - 
-              {selectedExperience.end_date ? new Date(selectedExperience.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
-            </p>
-            
-            {selectedExperience.achievements && (
-              <div className="modal-section">
-                <h4>Успехи</h4>
-                <ul className="modal-list">
-                  {selectedExperience.achievements.split('\n').filter(a => a.trim()).map((ach, i) => (
-                    <li key={i}>{ach.trim()}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
-            {selectedExperience.responsibilities && (
-              <div className="modal-section">
-                <h4>Обязанности</h4>
-                <ul className="modal-list">
-                  {selectedExperience.responsibilities.split('\n').filter(r => r.trim()).map((resp, i) => (
-                    <li key={i}>{resp.trim()}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            
-            {selectedExperience.stack && (
-              <div className="modal-section">
-                <h4>Стек технологий</h4>
-                <div className="modal-tags">
-                  {selectedExperience.stack.split(',').filter(s => s.trim()).map((tech, i) => (
-                    <span key={i} className="tech-tag">{tech.trim()}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {selectedExperience.description && (
-              <div className="modal-section">
-                <h4>Описание</h4>
-                <p>{selectedExperience.description}</p>
-              </div>
-            )}
-            
-            {!selectedExperience.description && !selectedExperience.responsibilities && !selectedExperience.stack && !selectedExperience.achievements && (
-              <p className="placeholder-text">Нет дополнительной информации</p>
-            )}
-          </div>
-        </div>
       )}
     </section>
   )

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Mail, Send, Globe, Network } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 export default function Contact({ isAdmin }) {
@@ -66,10 +66,14 @@ export default function Contact({ isAdmin }) {
     }
   }
 
+  function handleContactClick() {
+    if (contact?.email) {
+      window.location.href = `mailto:${contact.email}`
+    }
+  }
+
   if (loading) return <div className="section">Загрузка...</div>
   
-  const hasContactData = contact && (contact.email || contact.telegram || contact.github || contact.linkedin)
-
   return (
     <section id="contact" className="section">
       <p className="contact-intro">04. Что дальше?</p>
@@ -124,35 +128,13 @@ export default function Contact({ isAdmin }) {
             <button onClick={() => setEditing(false)} className="cancel-btn">Отмена</button>
           </div>
         </div>
-      ) : hasContactData ? (
-        <div className="contact-content">
-          {contact.email && (
-            <a href={`mailto:${contact.email}`} className="contact-link">
-              <Mail size={18} />
-              {contact.email}
-            </a>
-          )}
-          {contact.telegram && (
-            <a href={`https://t.me/${contact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="contact-link">
-              <Send size={18} />
-              Telegram: {contact.telegram.replace('@', '')}
-            </a>
-          )}
-          {contact.github && (
-            <a href={contact.github} target="_blank" rel="noopener noreferrer" className="contact-link">
-              <Globe size={18} />
-              GitHub
-            </a>
-          )}
-          {contact.linkedin && (
-            <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
-              <Network size={18} />
-              LinkedIn
-            </a>
-          )}
-        </div>
       ) : (
-        <p className="placeholder-text">Нет информации для отображения</p>
+        <div className="contact-content">
+          <button onClick={handleContactClick} className="contact-button">
+            <Mail size={18} />
+            Связаться
+          </button>
+        </div>
       )}
     </section>
   )
