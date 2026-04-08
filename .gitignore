@@ -2,7 +2,7 @@
 # Dependencies
 node_modules/
 
-# Build outputs
+# Build artifacts
 dist/
 build/
 target/
@@ -16,14 +16,33 @@ __pycache__/
 env/
 venv/
 .venv/
+.ENV
 .env
 .env.local
 .env.*
 .venv/
-.ENV
+venv/
+ENV/
+.env.d/
+.flaskenv
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.hypothesis/
 
 # Logs
 *.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # IDE
 .vscode/
@@ -31,21 +50,36 @@ venv/
 *.swp
 *.swo
 *~
+*.tmp
 
-# OS
-.DS_Store
-Thumbs.db
+# Environment specific
+.env
+.env.local
+.env.*
+!.env.example
 
 # Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Compressed
+# Distribution / packaging
+.Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+.egg-info/
+.eggs/
+.eggs/
+
+# Compressed files
 *.zip
+*.tar.gz
+*.tar.bz2
+*.tar.xz
 *.gz
-*.tar
-*.tgz
 *.bz2
 *.xz
 *.7z
@@ -60,8 +94,6 @@ htmlcov/
 *.Z
 *.lz
 *.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
+*.tar
+*.tgz
 ```

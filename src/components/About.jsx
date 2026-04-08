@@ -71,7 +71,8 @@ export default function About({ isAdmin }) {
   
   return (
     <section id="about" className="section">
-      <h2 className="section-title">Обо мне</h2>
+      <p className="contact-intro">01. Обо мне</p>
+      <h2 className="section-title" data-section="1">Обо мне</h2>
       
       {isAdmin && !editing && (
         <button onClick={() => setEditing(true)} className="admin-btn">
@@ -128,27 +129,20 @@ export default function About({ isAdmin }) {
         </div>
       ) : hasData ? (
         <div className="about-content">
-          <h3 className="name">{about.name}</h3>
-          <p className="title">{about.title}</p>
-          <p className="description">{about.description}</p>
-          
-          <div className="skills-section">
-            <div className="skills-block salesforce">
-              <h4>Salesforce</h4>
-              <div className="skills-list">
-                {(about.salesforce_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
-                  <span key={i} className="skill-tag">{skill.trim()}</span>
-                ))}
-              </div>
-            </div>
-            
-            <div className="skills-block golang">
-              <h4>Golang</h4>
-              <div className="skills-list">
-                {(about.golang_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
-                  <span key={i} className="skill-tag">{skill.trim()}</span>
-                ))}
-              </div>
+          <div className="about-text">
+            <p className="description">{about.description}</p>
+            <ul className="skills-list">
+              {(about.salesforce_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
+                <li key={i}>{skill.trim()}</li>
+              ))}
+              {(about.golang_skills || '').split(',').filter(s => s.trim()).map((skill, i) => (
+                <li key={i}>{skill.trim()}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="about-image">
+            <div className="about-image-wrapper">
+              <img src="/src/assets/hero.png" alt="Profile" />
             </div>
           </div>
         </div>
