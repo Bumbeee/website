@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Mail, Send, Github, Linkedin } from 'lucide-react'
+import { Mail, Send } from 'lucide-react'
+import { SiGithub, SiLinkedin } from 'react-icons/si'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
 
 export default function Contact({ isAdmin }) {
@@ -135,13 +136,13 @@ export default function Contact({ isAdmin }) {
           )}
           {contact.github && (
             <a href={contact.github} target="_blank" rel="noopener noreferrer" className="contact-link">
-              <Github size={18} />
+              <SiGithub size={18} />
               GitHub
             </a>
           )}
           {contact.linkedin && (
             <a href={contact.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link">
-              <Linkedin size={18} />
+              <SiLinkedin size={18} />
               LinkedIn
             </a>
           )}
