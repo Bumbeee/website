@@ -44,14 +44,45 @@ body {
   flex-direction: column;
 }
 
-/* Side Navigation (Desktop) */
-@media (min-width: 1080px) {
-  .side-nav {
+/* Fixed Social Links (Right Bottom) */
+.fixed-social {
+  position: fixed;
+  bottom: 0;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 100;
+}
+
+.fixed-social-link {
+  color: var(--text-secondary);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixed-social-link:hover {
+  color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.fixed-social-line {
+  width: 1px;
+  height: 90px;
+  background: var(--text-muted);
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .fixed-social {
     display: none;
   }
 }
 
-/* Navbar (Mobile/Tablet) */
+/* Navbar */
 .navbar {
   position: fixed;
   top: 0;
@@ -393,25 +424,42 @@ body {
 }
 
 .experience-item {
-  background: var(--bg-secondary);
-  padding: 2rem;
+  background: transparent;
+  padding: 0;
   border-radius: 4px;
   transition: var(--transition);
   cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.experience-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  z-index: -1;
+  transition: var(--transition);
+}
+
+.experience-item:hover::before {
+  background: var(--bg-tertiary);
 }
 
 .experience-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
 }
 
 .experience-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid var(--bg-tertiary);
+  padding: 1.5rem 2rem;
+  margin-bottom: 0;
+  border-bottom: none;
 }
 
 .experience-header-main h3 {
@@ -457,6 +505,7 @@ body {
 
 .experience-details {
   animation: slideDown 0.3s ease-out;
+  padding: 0 2rem 1.5rem 2rem;
 }
 
 @keyframes slideDown {
@@ -626,22 +675,52 @@ body {
 /* Projects Section */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+@media (max-width: 1200px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .project-card {
-  background: var(--bg-secondary);
-  padding: 2rem;
+  background: transparent;
+  padding: 1.5rem;
   border-radius: 4px;
   transition: var(--transition);
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
+}
+
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  z-index: -1;
+  transition: var(--transition);
+}
+
+.project-card:hover::before {
+  background: var(--bg-tertiary);
 }
 
 .project-card:hover {
-  transform: translateY(-7px);
+  transform: translateY(-5px);
 }
 
 .project-card h3 {
@@ -692,12 +771,38 @@ body {
   color: var(--text-primary);
 }
 
+/* View More Button */
+.view-more-container {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.view-more-btn {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.view-more-btn:hover {
+  background: rgba(56, 189, 248, 0.1);
+  transform: translateY(-3px);
+}
+
 /* Contact Section */
 .contact-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   max-width: 600px;
+  align-items: center;
 }
 
 .contact-button {
@@ -756,6 +861,12 @@ body {
   line-height: 1.8;
   margin-bottom: 50px;
   max-width: 600px;
+}
+
+.contact-content {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
 }
 
 /* Admin Styles */
