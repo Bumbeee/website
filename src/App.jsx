@@ -46,38 +46,25 @@ function App() {
 
   return (
     <div className="app">
-      {/* Side Navigation (Desktop) */}
-      <nav className="side-nav">
-        <div>
-          <a href="#" className="side-nav-logo">BC</a>
-          <ul className="side-nav-links">
-            <li><a href="#about" className="side-nav-link">Обо мне</a></li>
-            <li><a href="#experience" className="side-nav-link">Опыт</a></li>
-            <li><a href="#projects" className="side-nav-link">Проекты</a></li>
-            <li><a href="#contact" className="side-nav-link">Контакты</a></li>
-          </ul>
-        </div>
-        <div>
-          <div className="side-nav-line"></div>
-          <div className="side-social">
-            {footerContact?.github && (
-              <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="side-social-link">
-                <FaGithub size={20} />
-              </a>
-            )}
-            {footerContact?.linkedin && (
-              <a href={footerContact.linkedin} target="_blank" rel="noopener noreferrer" className="side-social-link">
-                <FaLinkedin size={20} />
-              </a>
-            )}
-            {footerContact?.telegram && (
-              <a href={`https://t.me/${footerContact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="side-social-link">
-                <FaTelegram size={20} />
-              </a>
-            )}
-          </div>
-        </div>
-      </nav>
+      {/* Fixed Social Links (Right Bottom) */}
+      <div className="fixed-social">
+        {footerContact?.github && (
+          <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="fixed-social-link" title="GitHub">
+            <FaGithub size={20} />
+          </a>
+        )}
+        {footerContact?.linkedin && (
+          <a href={footerContact.linkedin} target="_blank" rel="noopener noreferrer" className="fixed-social-link" title="LinkedIn">
+            <FaLinkedin size={20} />
+          </a>
+        )}
+        {footerContact?.telegram && (
+          <a href={`https://t.me/${footerContact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="fixed-social-link" title="Telegram">
+            <FaTelegram size={20} />
+          </a>
+        )}
+        <div className="fixed-social-line"></div>
+      </div>
 
       <Navbar isAdmin={isAdmin} onToggleAdmin={handleToggleAdmin} />
       
