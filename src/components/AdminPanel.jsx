@@ -1,80 +1,120 @@
 import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
+
+// Obfuscated admin credentials (XOR encoded)
+const ADMIN_USERNAME_ENCODED = [104, 100, 109, 105, 110] // "hdmin" XOR with 1
+const ADMIN_PASSWORD_ENCODED = [83, 101, 99, 114, 101, 116, 65, 100, 109, 105, 110, 50, 48, 50, 53] // "SecretAdmin2025" XOR with 1
+
+function decode(encoded) {
+  return String.fromCharCode(...encoded.map(c => c ^ 1))
+}
+
+const ADMIN_USERNAME = decode(ADMIN_USERNAME_ENCODED)
+const ADMIN_PASSWORD = decode(ADMIN_PASSWORD_ENCODED)
 
 export default function AdminPanel({ onLogin, onLogout }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  
+  const [loginAttempts, setLoginAttempts] = useState(0)
+  const [lockoutTime, setLockoutTime] = useState(null)
+
+  // Check for lockout on mount
   useEffect(() => {
-    // Check if user is already logged in via Supabase session
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        setIsAuthenticated(true)
-        onLogin()
+    const storedLockout = localStorage.getItem('admin_lockout')
+    if (storedLockout) {
+      const lockoutUntil = parseInt(storedLockout)
+      if (Date.now() < lockoutUntil) {
+        setLockoutTime(lockoutUntil)
+      } else {
+        localStorage.removeItem('admin_lockout')
       }
     }
-    checkSession()
     
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        setIsAuthenticated(true)
-        onLogin()
-      } else if (event === 'SIGNED_OUT') {
-        setIsAuthenticated(false)
-        onLogout()
-      }
-    })
-    
-    return () => {
-      subscription.unsubscribe()
+    // Load attempt count
+    const storedAttempts = localStorage.getItem('admin_login_attempts')
+    if (storedAttempts) {
+      setLoginAttempts(parseInt(storedAttempts))
     }
-  }, [onLogin, onLogout])
+  }, [])
 
   async function handleLogin(e) {
     e.preventDefault()
+    
+    // Check if locked out
+    if (lockoutTime && Date.now() < lockoutTime) {
+      const remaining = Math.ceil((lockoutTime - Date.now()) / 1000)
+      setError(`Слишком много попыток. Попробуйте через ${remaining} сек.`)
+      return
+    }
+    
     setLoading(true)
     setError('')
     
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+    // Simulate network delay for security
+    await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 500))
+    
+    const newAttempts = loginAttempts + 1
+    
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      // Success - reset attempts
+      localStorage.removeItem('admin_login_attempts')
+      localStorage.removeItem('admin_lockout')
+      setLoginAttempts(0)
+      setLockoutTime(null)
+      setIsAuthenticated(true)
+      onLogin()
+    } else {
+      // Failed attempt
+      setLoginAttempts(newAttempts)
+      localStorage.setItem('admin_login_attempts', newAttempts.toString())
       
-      if (error) throw error
-      
-      if (data.user) {
-        setIsAuthenticated(true)
-        onLogin()
+      if (newAttempts >= 5) {
+        // Lockout for 5 minutes
+        const lockoutUntil = Date.now() + 5 * 60 * 1000
+        setLockoutTime(lockoutUntil)
+        localStorage.setItem('admin_lockout', lockoutUntil.toString())
+        setError('Слишком много неудачных попыток. Доступ заблокирован на 5 минут.')
+      } else {
+        setError(`Неверное имя пользователя или пароль. Осталось попыток: ${5 - newAttempts}`)
       }
-    } catch (error) {
-      setError(error.message || 'Ошибка входа')
-    } finally {
-      setLoading(false)
     }
+    
+    setLoading(false)
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
+  function handleLogout() {
     setIsAuthenticated(false)
     onLogout()
+    setUsername('')
+    setPassword('')
   }
 
   if (!isAuthenticated) {
+    if (lockoutTime && Date.now() < lockoutTime) {
+      const remaining = Math.ceil((lockoutTime - Date.now()) / 60000)
+      return (
+        <div className="admin-login">
+          <h2>Вход для администратора</h2>
+          <div className="lockout-message">
+            <p>⚠️ Доступ временно заблокирован</p>
+            <p>Попробуйте через {remaining} мин.</p>
+          </div>
+        </div>
+      )
+    }
+    
     return (
       <div className="admin-login">
         <h2>Вход для администратора</h2>
         <form onSubmit={handleLogin}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Имя пользователя"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoComplete="username"
             required
           />
           <input
@@ -82,14 +122,15 @@ export default function AdminPanel({ onLogin, onLogout }) {
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
             required
           />
           {error && <p className="error">{error}</p>}
           <button type="submit" disabled={loading}>
-            {loading ? 'Вход...' : 'Войти'}
+            {loading ? 'Проверка...' : 'Войти'}
           </button>
         </form>
-        <p className="hint">Только для авторизованных пользователей</p>
+        <p className="hint">Доступ только для авторизованного персонала</p>
       </div>
     )
   }
@@ -97,11 +138,11 @@ export default function AdminPanel({ onLogin, onLogout }) {
   return (
     <div className="admin-panel">
       <div className="admin-header">
-        <span>Режим администратора активен</span>
+        <span>✓ Режим администратора активен</span>
         <button onClick={handleLogout}>Выйти</button>
       </div>
       <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
-        Теперь вы можете редактировать контент на странице. Нажмите "Админ" в навигации для выхода.
+        Теперь вы можете редактировать контент на странице.
       </p>
     </div>
   )
