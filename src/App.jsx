@@ -14,6 +14,37 @@ function App() {
   const [showAdminModal, setShowAdminModal] = useState(false)
   const [footerContact, setFooterContact] = useState(null)
   
+  // Secret key combination handler (press 'A' + 'D' + 'M' quickly) - moved to App component for security
+  useEffect(() => {
+    const secretCode = 'adm'
+    let input = ''
+    let timer = null
+    
+    const handleKeyDown = (e) => {
+      const key = e.key.toLowerCase()
+      input += key
+      if (input.length > secretCode.length) {
+        input = input.slice(-secretCode.length)
+      }
+      
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        input = ''
+      }, 1000)
+      
+      if (input === secretCode && !isAdmin) {
+        setShowAdminModal(true)
+        input = ''
+      }
+    }
+    
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      clearTimeout(timer)
+    }
+  }, [isAdmin])
+  
   useEffect(() => {
     fetchFooterContact()
   }, [])

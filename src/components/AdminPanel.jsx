@@ -3,34 +3,65 @@ import { supabase } from '../lib/supabase'
 
 export default function AdminPanel({ onLogin, onLogout }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   
   useEffect(() => {
-    const savedAuth = localStorage.getItem('adminAuthenticated')
-    if (savedAuth === 'true') {
-      setIsAuthenticated(true)
+    // Check if user is already logged in via Supabase session
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        setIsAuthenticated(true)
+        onLogin()
+      }
     }
-  }, [])
+    checkSession()
+    
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        setIsAuthenticated(true)
+        onLogin()
+      } else if (event === 'SIGNED_OUT') {
+        setIsAuthenticated(false)
+        onLogout()
+      }
+    })
+    
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [onLogin, onLogout])
 
   async function handleLogin(e) {
     e.preventDefault()
+    setLoading(true)
+    setError('')
     
-    // В реальном приложении здесь должна быть проверка через Supabase Auth
-    // Для простоты используем хардкод пароль (измените на свой!)
-    if (password === 'admin123') {
-      setIsAuthenticated(true)
-      localStorage.setItem('adminAuthenticated', 'true')
-      setError('')
-      onLogin()
-    } else {
-      setError('Неверный пароль')
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      
+      if (error) throw error
+      
+      if (data.user) {
+        setIsAuthenticated(true)
+        onLogin()
+      }
+    } catch (error) {
+      setError(error.message || 'Ошибка входа')
+    } finally {
+      setLoading(false)
     }
   }
 
-  function handleLogout() {
+  async function handleLogout() {
+    await supabase.auth.signOut()
     setIsAuthenticated(false)
-    localStorage.removeItem('adminAuthenticated')
     onLogout()
   }
 
@@ -40,15 +71,25 @@ export default function AdminPanel({ onLogin, onLogout }) {
         <h2>Вход для администратора</h2>
         <form onSubmit={handleLogin}>
           <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
             type="password"
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
           {error && <p className="error">{error}</p>}
-          <button type="submit">Войти</button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Вход...' : 'Войти'}
+          </button>
         </form>
-        <p className="hint">Пароль по умолчанию: admin123</p>
+        <p className="hint">Только для авторизованных пользователей</p>
       </div>
     )
   }
