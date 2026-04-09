@@ -122,6 +122,15 @@ export default function Contact({ isAdmin }) {
               onChange={(e) => setFormData({...formData, linkedin: e.target.value})}
             />
           </div>
+          <div className="form-group">
+            <label>HeadHunter:</label>
+            <input
+              type="text"
+              value={formData.hh || ''}
+              onChange={(e) => setFormData({...formData, hh: e.target.value})}
+              placeholder="https://hh.ru/resume/..."
+            />
+          </div>
           <div className="form-actions">
             <button onClick={handleSave} className="save-btn">Сохранить</button>
             <button onClick={() => setEditing(false)} className="cancel-btn">Отмена</button>

@@ -128,6 +128,13 @@ function App() {
             <FaTelegram size={20} />
           </a>
         )}
+        {footerContact?.hh && (
+          <a href={footerContact.hh} target="_blank" rel="noopener noreferrer" className="fixed-social-link" title="HeadHunter">
+            <svg className="hh-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <use href="/icons.svg#hh-icon" />
+            </svg>
+          </a>
+        )}
         <div className="fixed-social-line"></div>
       </div>
 
