@@ -70,20 +70,14 @@ export default function HeroSection({ isAdmin }) {
   return (
     <>
       {isAdmin && !editing && (
-        <button onClick={() => setEditing(true)} className="admin-btn" style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+        <button onClick={() => setEditing(true)} className="admin-btn" style={{ position: 'absolute', top: '80px', right: '40px' }}>
           Редактировать Hero
         </button>
       )}
 
       {editing ? (
-        <div className="edit-form" style={{ 
-          background: '#fff', 
-          padding: '2rem', 
-          borderRadius: '8px', 
-          marginBottom: '2rem',
-          border: '1px solid #e5e7eb'
-        }}>
-          <h3 style={{ marginBottom: '1.5rem' }}>Редактирование Hero секции</h3>
+        <div className="edit-form">
+          <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Редактирование Hero секции</h3>
           <div className="form-group">
             <label>Приветствие:</label>
             <input
