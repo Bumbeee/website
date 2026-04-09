@@ -42,7 +42,7 @@ export default function Navbar({ isAdmin, onToggleAdmin, onOpenResumeModal }) {
         <a href="#" className="nav-logo">m.d</a>
         
         <button 
-          className="mobile-menu-btn"
+          className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
