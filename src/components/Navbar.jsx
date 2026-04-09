@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, FileText } from 'lucide-react'
 
-export default function Navbar({ isAdmin, onToggleAdmin }) {
+export default function Navbar({ isAdmin, onToggleAdmin, onOpenResumeModal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   
   const navItems = [
     { name: 'Обо мне', href: '#about' },
     { name: 'Опыт', href: '#experience' },
     { name: 'Проекты', href: '#projects' },
-    { name: 'Контакты', href: '#contact' },
   ]
 
   return (
@@ -29,6 +28,10 @@ export default function Navbar({ isAdmin, onToggleAdmin }) {
               {item.name}
             </a>
           ))}
+          <button onClick={() => { onOpenResumeModal(); setMobileMenuOpen(false); }} className="nav-link resume-nav-btn">
+            <FileText size={16} />
+            <span style={{ marginLeft: '5px' }}>Резюме</span>
+          </button>
           {isAdmin && (
             <button onClick={onToggleAdmin} className="admin-toggle active">
               Выйти из админ режима

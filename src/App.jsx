@@ -109,6 +109,16 @@ function App() {
     }
   }
 
+  function handleOpenResumeModal() {
+    // Находим компонент Contact и вызываем его метод открытия модального окна
+    const contactSection = document.querySelector('#contact')
+    if (contactSection) {
+      // Создаем и dispatch-им кастомное событие для открытия модалки резюме
+      const event = new CustomEvent('open-resume-modal')
+      window.dispatchEvent(event)
+    }
+  }
+
   return (
     <div className="app">
       {/* Fixed Social Links (Left Bottom) */}
@@ -148,7 +158,7 @@ function App() {
         </div>
       )}
 
-      <Navbar isAdmin={isAdmin} onToggleAdmin={handleToggleAdmin} />
+      <Navbar isAdmin={isAdmin} onToggleAdmin={handleToggleAdmin} onOpenResumeModal={handleOpenResumeModal} />
       
       {showAdminModal && (
         <div className="modal-overlay" onClick={() => setShowAdminModal(false)}>
