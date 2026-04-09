@@ -208,6 +208,7 @@ body {
 @media (max-width: 768px) {
   .nav-container {
     padding-left: 20px; /* Reset padding for mobile */
+    padding-right: 20px;
     justify-content: space-between; /* Ensure proper spacing */
   }
   
@@ -220,6 +221,10 @@ body {
   }
   
   .nav-links.active {
+    display: flex !important;
+  }
+  
+  .nav-links.active.show {
     display: flex !important;
     flex-direction: column;
     position: fixed;
@@ -238,7 +243,7 @@ body {
     z-index: 999;
   }
   
-  .nav-links.active.show {
+  .nav-links.show {
     right: 0;
   }
   
