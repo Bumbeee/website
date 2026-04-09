@@ -44,6 +44,45 @@ body {
   flex-direction: column;
 }
 
+/* Fixed Email (Left Bottom) */
+.fixed-email {
+  position: fixed;
+  bottom: 0;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 100;
+}
+
+.fixed-email-link {
+  color: var(--text-secondary);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+
+.fixed-email-link:hover {
+  color: var(--accent);
+  transform: rotate(180deg) translateY(-3px);
+}
+
+.fixed-email-line {
+  width: 1px;
+  height: 90px;
+  background: var(--text-muted);
+  margin-top: 10px;
+}
+
 /* Fixed Social Links (Right Bottom) */
 .fixed-social {
   position: fixed;
@@ -112,7 +151,8 @@ body {
 }
 
 @media (max-width: 768px) {
-  .fixed-social {
+  .fixed-social,
+  .fixed-email {
     display: none;
   }
 }

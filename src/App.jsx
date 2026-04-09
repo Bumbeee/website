@@ -90,6 +90,16 @@ function App() {
 
   return (
     <div className="app">
+      {/* Fixed Email (Left Bottom) */}
+      {footerContact?.email && (
+        <div className="fixed-email">
+          <a href={`mailto:${footerContact.email}`} className="fixed-email-link" title="Email">
+            {footerContact.email}
+          </a>
+          <div className="fixed-email-line"></div>
+        </div>
+      )}
+
       {/* Fixed Social Links (Right Bottom) */}
       <div className="fixed-social">
         {footerContact?.github && (
