@@ -9,6 +9,7 @@ import Contact from './components/Contact'
 import { Send, Mail } from 'lucide-react'
 import { FaTelegram, FaLinkedin, FaGithub } from 'react-icons/fa'
 import { supabase, isSupabaseConfigured } from './lib/supabase'
+import { HhIcon } from './assets/hhIcon'
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false)
@@ -16,7 +17,6 @@ function App() {
   const [footerContact, setFooterContact] = useState(null)
   const [heroData, setHeroData] = useState(null)
   
-  // Secret key combination handler (press 'A' + 'D' + 'M' quickly) - moved to App component for security
   useEffect(() => {
     const secretCode = 'adm'
     let input = ''
@@ -140,9 +140,7 @@ function App() {
         )}
         {footerContact?.hh && (
           <a href={footerContact.hh} target="_blank" rel="noopener noreferrer" className="fixed-social-link" title="HeadHunter">
-            <svg className="hh-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <use href="/icons.svg#hh-icon" />
-            </svg>
+            <HhIcon size={20}></HhIcon>
           </a>
         )}
         <div className="fixed-social-line"></div>
@@ -214,9 +212,7 @@ function App() {
           )}
           {footerContact?.hh && (
             <a href={footerContact.hh} target="_blank" rel="noopener noreferrer" className="footer-social-link" title="HeadHunter">
-              <svg className="hh-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                <use href="/icons.svg#hh-icon" />
-              </svg>
+              <HhIcon size={20}></HhIcon>
             </a>
           )}
           {footerContact?.email && (
