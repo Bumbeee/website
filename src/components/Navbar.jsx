@@ -39,7 +39,7 @@ export default function Navbar({ isAdmin, onToggleAdmin, onOpenResumeModal }) {
   return (
     <nav className="navbar">
       <div className="nav-container">
-        <a href="#" className="nav-logo">Portfolio</a>
+        <a href="#" className="nav-logo">m.d</a>
         
         <button 
           className="mobile-menu-btn"
