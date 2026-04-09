@@ -245,6 +245,26 @@ body {
   color: var(--accent);
 }
 
+.resume-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--accent);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.resume-nav-btn:hover {
+  background: rgba(56, 189, 248, 0.05);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+.resume-nav-btn::before {
+  content: none;
+}
+
 .admin-toggle {
   background: transparent;
   border: 1px solid var(--accent);
@@ -846,6 +866,147 @@ body {
   gap: 8px;
 }
 
+/* Resume Modal Styles */
+.modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  border-radius: 4px;
+}
+
+.modal-close:hover {
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.modal-large {
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+}
+
+.resume-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.resume-option {
+  background: var(--bg-tertiary);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.resume-option h4 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.resume-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.resume-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.resume-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.view-btn {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.view-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.download-btn {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.download-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-primary);
+}
+
+.no-resume {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.resume-viewer {
+  width: 100%;
+  height: 60vh;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.resume-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.resume-viewer-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.download-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent);
+  color: var(--bg-primary);
+  text-decoration: none;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.download-link-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
 /* Projects Section */
 .projects-grid {
   display: grid;
@@ -1011,6 +1172,17 @@ body {
 }
 
 /* Contact Section */
+.contact-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  max-width: 600px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0 auto;
+}
+
 .contact-content {
   display: flex;
   flex-direction: column;
@@ -1036,6 +1208,7 @@ body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .contact-button:hover {
