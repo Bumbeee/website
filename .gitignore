@@ -2,28 +2,45 @@
 # Dependencies
 node_modules/
 
-# Logs and temp files
-*.log
-*.tmp
+# Build artifacts
+dist/
+build/
+target/
 
-# Environment
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.ENV
+.pip-tools/
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage/
+
+# Logs
+*.log
+
+# Environment variables
 .env
 .env.local
 .env.*
 
-# Editors
+# IDE files
 .vscode/
 .idea/
+*.swp
+*.swo
+*.tmp
 
-# Build outputs
-dist/
-build/
-*.out
-*.exe
-*.dll
-*.so
-*.a
-*.obj
+# OS generated files
+.DS_Store
+Thumbs.db
 
 # Compressed files
 *.zip
@@ -48,25 +65,4 @@ build/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
-# IDE specific
-.vs/
-*.swp
-*.swo
-
-# Testing
-.coverage*
-htmlcov/
-.pytest_cache/
-.mypy_cache/
-.hypothesis/
-
-# OS generated
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
 ```
