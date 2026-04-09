@@ -196,6 +196,36 @@ function App() {
       </main>
 
       <footer className="footer">
+        <div className="footer-social-links">
+          {footerContact?.github && (
+            <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="footer-social-link" title="GitHub">
+              <FaGithub size={20} />
+            </a>
+          )}
+          {footerContact?.linkedin && (
+            <a href={footerContact.linkedin} target="_blank" rel="noopener noreferrer" className="footer-social-link" title="LinkedIn">
+              <FaLinkedin size={20} />
+            </a>
+          )}
+          {footerContact?.telegram && (
+            <a href={`https://t.me/${footerContact.telegram.replace('@', '')}`} target="_blank" rel="noopener noreferrer" className="footer-social-link" title="Telegram">
+              <FaTelegram size={20} />
+            </a>
+          )}
+          {footerContact?.hh && (
+            <a href={footerContact.hh} target="_blank" rel="noopener noreferrer" className="footer-social-link" title="HeadHunter">
+              <svg className="hh-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <use href="/icons.svg#hh-icon" />
+              </svg>
+            </a>
+          )}
+          {footerContact?.email && (
+            <a href={`mailto:${footerContact.email}`} className="footer-email-link" title="Email">
+              <Mail size={20} />
+              <span>{footerContact.email}</span>
+            </a>
+          )}
+        </div>
         <p>&copy; {new Date().getFullYear()} Portfolio. All rights reserved.</p>
       </footer>
     </div>
