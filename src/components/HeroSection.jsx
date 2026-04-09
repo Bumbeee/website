@@ -70,7 +70,7 @@ export default function HeroSection({ isAdmin }) {
   return (
     <>
       {isAdmin && !editing && (
-        <button onClick={() => setEditing(true)} className="admin-btn" style={{ position: 'absolute', top: '80px', right: '40px' }}>
+        <button onClick={() => setEditing(true)} className="admin-btn">
           Редактировать Hero
         </button>
       )}
