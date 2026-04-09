@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase, isSupabaseConfigured } from '../lib/supabase'
+import { FaGithub } from 'react-icons/fa'
 
 export default function Projects({ isAdmin }) {
   const [projects, setProjects] = useState([])
@@ -216,18 +217,20 @@ export default function Projects({ isAdmin }) {
                   </div>
                 ) : (
                   <>
-                    <h3>{project.title}</h3>
+                    <div className="project-card-header">
+                      <h3>{project.title}</h3>
+                      {project.link && (
+                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="github-icon-link" title="GitHub">
+                          <FaGithub size={20} />
+                        </a>
+                      )}
+                    </div>
                     <p className="description">{project.description}</p>
                     <div className="technologies">
                       {(project.technologies || '').split(',').filter(t => t.trim()).map((tech, i) => (
                         <span key={i} className="tech-tag">{tech.trim()}</span>
                       ))}
                     </div>
-                    {project.link && (
-                      <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
-                        Посмотреть проект →
-                      </a>
-                    )}
                     {isAdmin && (
                       <div className="admin-actions">
                         <button onClick={() => startEdit(project)} className="edit-btn">Редактировать</button>

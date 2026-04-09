@@ -942,6 +942,32 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.project-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.project-card-header h3 {
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.github-icon-link {
+  color: var(--text-secondary);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.github-icon-link:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
 .project-link {
   color: var(--accent);
   text-decoration: none;
