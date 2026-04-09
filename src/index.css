@@ -1516,6 +1516,44 @@ body {
   text-align: center;
 }
 
+.footer-social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-social-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-social-link:hover {
+  color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.footer-email-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+
+.footer-email-link:hover {
+  color: var(--accent);
+}
+
 .footer-content {
   max-width: 1000px;
   margin: 0 auto;
