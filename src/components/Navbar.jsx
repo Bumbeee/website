@@ -29,6 +29,11 @@ export default function Navbar({ isAdmin, onToggleAdmin }) {
               {item.name}
             </a>
           ))}
+          {isAdmin && (
+            <button onClick={onToggleAdmin} className="admin-toggle active">
+              Выйти из админ режима
+            </button>
+          )}
         </div>
       </div>
     </nav>
