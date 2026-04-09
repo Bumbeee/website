@@ -222,10 +222,6 @@ body {
   
   .nav-links.active {
     display: flex !important;
-  }
-  
-  .nav-links.active.show {
-    display: flex !important;
     flex-direction: column;
     position: fixed;
     top: 0;
@@ -243,7 +239,7 @@ body {
     z-index: 999;
   }
   
-  .nav-links.show {
+  .nav-links.active.show {
     right: 0;
   }
   
