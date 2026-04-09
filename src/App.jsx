@@ -90,17 +90,7 @@ function App() {
 
   return (
     <div className="app">
-      {/* Fixed Email (Left Bottom) */}
-      {footerContact?.email && (
-        <div className="fixed-email">
-          <a href={`mailto:${footerContact.email}`} className="fixed-email-link" title="Email">
-            {footerContact.email}
-          </a>
-          <div className="fixed-email-line"></div>
-        </div>
-      )}
-
-      {/* Fixed Social Links (Right Bottom) */}
+      {/* Fixed Social Links (Left Bottom) */}
       <div className="fixed-social">
         {footerContact?.github && (
           <a href={footerContact.github} target="_blank" rel="noopener noreferrer" className="fixed-social-link" title="GitHub">
@@ -119,6 +109,16 @@ function App() {
         )}
         <div className="fixed-social-line"></div>
       </div>
+
+      {/* Fixed Email (Right Bottom) */}
+      {footerContact?.email && (
+        <div className="fixed-email">
+          <a href={`mailto:${footerContact.email}`} className="fixed-email-link" title="Email">
+            {footerContact.email}
+          </a>
+          <div className="fixed-email-line"></div>
+        </div>
+      )}
 
       <Navbar isAdmin={isAdmin} onToggleAdmin={handleToggleAdmin} />
       
