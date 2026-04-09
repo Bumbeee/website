@@ -7,6 +7,7 @@ export default function Projects({ isAdmin }) {
   const [editingId, setEditingId] = useState(null)
   const [formData, setFormData] = useState({})
   const [showAll, setShowAll] = useState(false)
+  const [isCollapsing, setIsCollapsing] = useState(false)
   
   useEffect(() => {
     fetchProjects()
@@ -96,6 +97,19 @@ export default function Projects({ isAdmin }) {
     setFormData({})
   }
   
+  function handleShowAll() {
+    setShowAll(true)
+    setIsCollapsing(false)
+  }
+  
+  function handleCollapse() {
+    setIsCollapsing(true)
+    setTimeout(() => {
+      setShowAll(false)
+      setIsCollapsing(false)
+    }, 400)
+  }
+  
   if (loading) return <div className="section">Загрузка...</div>
   
   return (
@@ -155,8 +169,12 @@ export default function Projects({ isAdmin }) {
       <div className="projects-grid">
         {projects.length > 0 ? (
           <>
-            {(showAll ? projects : projects.slice(0, 3)).map((project) => (
-              <div key={project.id} className="project-card">
+            {(showAll ? projects : projects.slice(0, 4)).map((project, index) => (
+              <div 
+                key={project.id} 
+                className={`project-card ${isCollapsing && index >= 4 ? 'collapsing' : ''}`}
+                style={{ animationDelay: `${(index + 1) * 0.1}s` }}
+              >
                 {editingId === project.id ? (
                   <div className="edit-form">
                     <div className="form-group">
@@ -221,9 +239,9 @@ export default function Projects({ isAdmin }) {
               </div>
             ))}
             
-            {projects.length > 3 && !showAll && (
+            {projects.length > 4 && !showAll && (
               <div className="view-more-container">
-                <button onClick={() => setShowAll(true)} className="view-more-btn">
+                <button onClick={handleShowAll} className="view-more-btn">
                   Посмотреть все проекты
                 </button>
               </div>
@@ -231,7 +249,7 @@ export default function Projects({ isAdmin }) {
             
             {showAll && (
               <div className="view-more-container">
-                <button onClick={() => setShowAll(false)} className="view-more-btn">
+                <button onClick={handleCollapse} className="view-more-btn">
                   Свернуть
                 </button>
               </div>
