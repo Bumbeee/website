@@ -5,43 +5,22 @@ node_modules/
 # Build artifacts
 dist/
 build/
-target/
+*.min.js
+*.bundle.js
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-.ENV
-.python-version
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
 
 # Logs
 *.log
 
-# Environment variables
-.env
-.env.local
-*.env*
-
-# Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# OS generated files
 .DS_Store
 Thumbs.db
-
-# Coverage reports
-coverage/
-htmlcov/
-.coverage
-
-# MyPy cache
-.mypy_cache/
-.pytest_cache/
 ```

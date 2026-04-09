@@ -208,6 +208,7 @@ body {
 @media (max-width: 768px) {
   .nav-container {
     padding-left: 20px; /* Reset padding for mobile */
+    justify-content: space-between; /* Ensure proper spacing */
   }
   
   .nav-logo {
@@ -219,29 +220,36 @@ body {
   }
   
   .nav-links.active {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     position: fixed;
     top: 0;
     right: -100%;
     height: 100vh;
     width: 70%;
+    max-width: 300px;
     background: var(--bg-secondary);
     padding: 4rem 2rem;
     gap: 1.5rem;
     border-radius: 0;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
     min-width: auto;
-    transition: var(--transition);
+    transition: right 0.3s ease-in-out;
+    z-index: 999;
   }
   
-  .nav-links.active {
+  .nav-links.active.show {
     right: 0;
   }
   
   .mobile-menu-btn {
     display: block;
     z-index: 1001;
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 5px;
   }
 }
 
@@ -266,7 +274,7 @@ body {
 }
 
 .resume-nav-btn {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   background: transparent;
   border: 1px solid var(--accent);
@@ -275,6 +283,8 @@ body {
   cursor: pointer;
   transition: var(--transition);
   height: 40px;
+  color: var(--accent);
+  text-decoration: none;
 }
 
 .resume-nav-btn:hover {
@@ -284,6 +294,12 @@ body {
 
 .resume-nav-btn::before {
   content: none;
+}
+
+/* Ensure icons inside resume button are styled */
+.resume-nav-btn svg {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .admin-toggle {
