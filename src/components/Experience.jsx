@@ -274,8 +274,7 @@ export default function Experience({ isAdmin }) {
                   </div>
                   <div className="experience-header-right">
                     <span className="period">
-                      {exp.start_date ? new Date(exp.start_date).toLocaleDateString('ru-RU') : ''} - 
-                      {exp.end_date ? new Date(exp.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
+                      {exp.start_date ? new Date(exp.start_date).toLocaleDateString('ru-RU') : ''} -{exp.end_date ? ' ' + new Date(exp.end_date).toLocaleDateString('ru-RU') : ' н.в.'}
                     </span>
                     <button className="expand-btn">
                       {expandedId === exp.id ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
