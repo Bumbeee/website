@@ -21,21 +21,34 @@ function App() {
     let timer = null
     
     const handleKeyDown = (e) => {
+      // Only process lowercase letters a-z
+      if (!/^[a-zA-Z]$/.test(e.key)) return
+      
       const key = e.key.toLowerCase()
       input += key
+      
+      // Keep only the last N characters where N is the length of secretCode
       if (input.length > secretCode.length) {
         input = input.slice(-secretCode.length)
       }
       
+      // Clear any existing timer
       clearTimeout(timer)
+      
+      // Reset input after 1 second of no typing
       timer = setTimeout(() => {
         input = ''
       }, 1000)
       
+      // Check if the secret code was entered
       if (input === secretCode && !isAdmin) {
+        console.log('Secret code entered! Showing admin modal...')
         setShowAdminModal(true)
         input = ''
       }
+      
+      // Debug log (remove in production)
+      console.log('Key pressed:', key, 'Current input:', input)
     }
     
     window.addEventListener('keydown', handleKeyDown)
