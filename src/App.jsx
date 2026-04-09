@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import AdminPanel from './components/AdminPanel'
+import HeroSection from './components/HeroSection'
 import About from './components/About'
 import Experience from './components/Experience'
 import Projects from './components/Projects'
@@ -13,6 +14,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [showAdminModal, setShowAdminModal] = useState(false)
   const [footerContact, setFooterContact] = useState(null)
+  const [heroData, setHeroData] = useState(null)
   
   // Secret key combination handler (press 'A' + 'D' + 'M' quickly) - moved to App component for security
   useEffect(() => {
@@ -60,6 +62,7 @@ function App() {
   
   useEffect(() => {
     fetchFooterContact()
+    fetchHeroData()
   }, [])
   
   async function fetchFooterContact() {
@@ -77,6 +80,24 @@ function App() {
       setFooterContact(data)
     } catch (error) {
       console.error('Error fetching footer contact:', error)
+    }
+  }
+  
+  async function fetchHeroData() {
+    if (!isSupabaseConfigured) {
+      return
+    }
+    
+    try {
+      const { data, error } = await supabase
+        .from('hero')
+        .select('*')
+        .single()
+
+      if (error && error.code !== 'PGRST116') throw error
+      setHeroData(data)
+    } catch (error) {
+      console.error('Error fetching hero data:', error)
     }
   }
   
@@ -140,14 +161,13 @@ function App() {
       )}
 
       <main className="main-content">
-        <section className="hero">
-          <p className="hero-overline">Привет, меня зовут</p>
-          <h1>{footerContact?.name || 'Ваше Имя'}.</h1>
-          <h2>Я создаю вещи для интернета.</h2>
+        <section className="hero" style={{ position: 'relative' }}>
+          <HeroSection isAdmin={isAdmin} />
+          <p className="hero-overline">{heroData?.greeting || 'Привет, меня зовут'}</p>
+          <h1>{heroData?.name || footerContact?.name || 'Ваше Имя'}.</h1>
+          <h2>{heroData?.tagline || 'Я создаю вещи для интернета.'}</h2>
           <p className="hero-description">
-            Я Salesforce Developer и Golang Enthusiast, специализирующийся на создании 
-            исключительных цифровых продуктов. В настоящее время я сосредоточен на 
-            разработке масштабируемых решений.
+            {heroData?.description || 'Я Salesforce Developer и Golang Enthusiast, специализирующийся на создании исключительных цифровых продуктов. В настоящее время я сосредоточен на разработке масштабируемых решений.'}
           </p>
           <a href={`mailto:${footerContact?.email || ''}`} className="cta-button">Связаться со мной</a>
         </section>
