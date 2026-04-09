@@ -8,6 +8,7 @@ export default function Navbar({ isAdmin, onToggleAdmin, onOpenResumeModal }) {
     { name: 'Обо мне', href: '#about' },
     { name: 'Опыт', href: '#experience' },
     { name: 'Проекты', href: '#projects' },
+    { name: '04. Контакты', href: '#contact' },
   ]
 
   return (
