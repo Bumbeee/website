@@ -44,11 +44,12 @@ export default function Navbar({ isAdmin, onToggleAdmin, onOpenResumeModal }) {
         <button 
           className="mobile-menu-btn"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <div className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
+        <div className={`nav-links ${mobileMenuOpen ? 'active show' : ''}`}>
           {navItems.map((item) => (
             <a key={item.name} href={item.href} className="nav-link" onClick={() => setMobileMenuOpen(false)}>
               {item.name}
