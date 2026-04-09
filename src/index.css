@@ -444,7 +444,6 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--bg-secondary);
   border-radius: 4px;
   z-index: -1;
   transition: var(--transition);
@@ -806,6 +805,10 @@ body {
 .project-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.project-card:hover h3{
+ color: var(--accent);
 }
 
 .project-card h3 {
